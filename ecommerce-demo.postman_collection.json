@@ -54,7 +54,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/category/list",
+					"raw": "http://localhost:8080/api/category/list?size=5&page=0&sort=id,desc",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -64,6 +64,20 @@
 						"api",
 						"category",
 						"list"
+					],
+					"query": [
+						{
+							"key": "size",
+							"value": "5"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "sort",
+							"value": "id,desc"
+						}
 					]
 				}
 			},

@@ -3,6 +3,8 @@ package com.demo.ecommerce.service;
 import com.demo.ecommerce.model.Category;
 import com.demo.ecommerce.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,8 +49,8 @@ public class CategoryService {
         return categoryRepo.findById(id);
     }
 
-    public List<Category> findALl() {
-        return categoryRepo.findAll();
+    public Page<Category> findALl(Pageable page) {
+        return categoryRepo.findAll(page);
     }
 
     public void deleteById(Integer id) {
