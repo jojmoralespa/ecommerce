@@ -1,22 +1,36 @@
 
-<div *ngFor="let category of categories">
-    <p-card [header]="category.name" subheader="" [style]="{width: '360px'}" styleClass="p-card-shadow">
-        <ng-template pTemplate="header">
-            <img alt="Card" [src]="category.imageUrl">
-        </ng-template>
-        <p>{{category.description}}</p>
-        <ng-template pTemplate="footer">
-        </ng-template>
-    </p-card>
+<div>
+    <h2>
+        Categorías
+    </h2>
+    <div class="grid">
+        <div *ngFor="let category of categories" class="col-3 my-4 mx-6">
+            <p-card [header]="category.name" subheader="" [style]="{width: '360px'}" styleClass="p-card-shadow">
+                <ng-template pTemplate="header">
+                    <img alt="Card" [src]="category.imageUrl">
+                </ng-template>
+                <p>{{category.description}}</p>
+                <ng-template pTemplate="footer">
+                </ng-template>
+            </p-card>
+        </div>
+    </div>
 </div>
 
-<div *ngFor="let product of products">
-    <p-card [header]="product.name" [subheader]="product.category.name" [style]="{width: '360px'}" styleClass="p-card-shadow">
-        <ng-template pTemplate="header">
-            <img alt="Card" [src]="product.imageUrl">
-        </ng-template>
-        <p>{{product.description}}</p>
-        <ng-template pTemplate="footer">
-        </ng-template>
-    </p-card>
+<div>
+    <h2>
+        Productos
+    </h2>
+    <div class="grid">
+        <div *ngFor="let product of products" class="col-3 my-4 mx-6">
+            <p-card [header]="product.name" [subheader]="product.category.name" [style]="{width: '360px'}" styleClass="p-card-shadow">
+                <ng-template pTemplate="header">
+                    <img alt="Card" [src]="product.imageUrl">
+                </ng-template>
+                <p>{{product.description}}</p>
+                <ng-template pTemplate="footer">
+                </ng-template>
+            </p-card>
+        </div>
+    </div>
 </div>

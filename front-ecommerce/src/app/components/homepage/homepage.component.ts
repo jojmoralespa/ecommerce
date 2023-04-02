@@ -14,6 +14,10 @@ export class HomepageComponent implements OnInit{
   categories: Category[] = [];
   products: Product[] = [];
 
+  size: number = 6
+  page: number = 0
+  sort:string = "id"
+
   constructor(private categoryService: CategoryService,
     private productService: ProductService){}
 
@@ -23,8 +27,8 @@ export class HomepageComponent implements OnInit{
   }
   
   findAllCategories(){
-      this.categoryService.findAllCategories().subscribe(
-        categories => {this.categories = categories;
+      this.categoryService.findAllCategories(this.size, this.page, this.sort).subscribe(
+        page => {this.categories = page.content;
         });
     }
 

@@ -3,6 +3,7 @@ package com.demo.ecommerce.utils.service;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectResult;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,13 +16,13 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class S3Service implements FileServiceImpl {
 
     private final Logger log = LoggerFactory.getLogger(S3Service.class);
 
-    @Value("${bucket-name}")
-    private final String bucketName;
+    @Value("${bucketName}")
+    private String bucketName;
 
     private final AmazonS3 s3Client;
 
