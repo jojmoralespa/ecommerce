@@ -17,6 +17,8 @@ public class AmazonS3File {
         this.key = path;
     }
 
+    public AmazonS3File() {
+    }
 
 
 

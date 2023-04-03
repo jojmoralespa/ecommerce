@@ -1,6 +1,9 @@
 package com.demo.ecommerce.utils.service;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 
 import com.demo.ecommerce.utils.aws.AmazonS3File;
@@ -15,16 +18,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class S3Service implements FileServiceImpl {
-
-    private static final String HTTPS = "https://";
-
-    @Getter
-    private static final String domain = "s3.amazonaws.com/";
 
     private final Logger log = LoggerFactory.getLogger(S3Service.class);
 
@@ -34,19 +33,32 @@ public class S3Service implements FileServiceImpl {
     private final AmazonS3 s3Client;
 
     @Override
-    public AmazonS3File uploadFile(MultipartFile file ){
+    public AmazonS3File uploadFile(MultipartFile file) {
         try {
-            File fileConvert = convertMultiPartToFile(file);
+            InputStream fileConvert = file.getInputStream();
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentLength(file.getSize()); // Definir la longitud de la data a subir para evitar errores
 
-            PutObjectResult putObjectResult = s3Client.putObject(bucketName, file.getName(), fileConvert);
+            PutObjectRequest putObjectResult = new PutObjectRequest(bucketName, file.getOriginalFilename(), fileConvert, metadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead); //Fijar publico acceso de lectura al bucket
 
-            return new AmazonS3File(file.getName(), HTTPS + getDomain() + bucketName + "/", file.getName());
+            s3Client.putObject(putObjectResult);
+
+            return new AmazonS3File().setUrl(s3Client.getUrl(bucketName, file.getOriginalFilename()).toString());
         } catch (Exception e) {
             log.error("Error trying to saveFile", e);
         }
 
         return null;
     }
+
+    private File convertMultiPartToFile(MultipartFile file) throws IOException {
+        File convertFile = new File(file.getOriginalFilename());
+        FileOutputStream fos = new FileOutputStream(convertFile);
+        fos.write(file.getBytes());
+        return convertFile;
+    }
+
 
     @Override
     public byte[] downloadFile(String fileName) {
@@ -61,14 +73,6 @@ public class S3Service implements FileServiceImpl {
     @Override
     public List<String> listAllFiles() {
         return null;
-    }
-
-
-    private File convertMultiPartToFile(MultipartFile file) throws IOException {
-        File convertFile = new File(file.getOriginalFilename());
-        FileOutputStream fos = new FileOutputStream(convertFile);
-        fos.write(file.getBytes());
-        return convertFile;
     }
 
 

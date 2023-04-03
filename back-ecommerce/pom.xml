@@ -51,6 +51,12 @@
             <groupId>io.awspring.cloud</groupId>
             <artifactId>spring-cloud-starter-aws-messaging</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3 -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>1.12.440</version>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
