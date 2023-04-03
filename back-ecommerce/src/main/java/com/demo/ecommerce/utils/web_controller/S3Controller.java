@@ -25,7 +25,7 @@ public class S3Controller {
             log.warn("Trying to uploadFile without a multipartFile");
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(s3Service.saveFile(file));
+        return ResponseEntity.ok(s3Service.uploadFile(file).getUrl());
 
     }
 

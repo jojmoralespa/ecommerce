@@ -2,7 +2,9 @@ package com.demo.ecommerce.utils.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectResult;
-import lombok.AllArgsConstructor;
+
+import com.demo.ecommerce.utils.aws.AmazonS3File;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +21,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class S3Service implements FileServiceImpl {
 
+    private static final String HTTPS = "https://";
+
+    @Getter
+    private static final String domain = "s3.amazonaws.com/";
+
     private final Logger log = LoggerFactory.getLogger(S3Service.class);
 
     @Value("${bucketName}")
@@ -27,13 +34,13 @@ public class S3Service implements FileServiceImpl {
     private final AmazonS3 s3Client;
 
     @Override
-    public String saveFile(MultipartFile file) {
+    public AmazonS3File uploadFile(MultipartFile file ){
         try {
             File fileConvert = convertMultiPartToFile(file);
 
-            PutObjectResult putObjectResult = s3Client.putObject(bucketName, file.getOriginalFilename(), fileConvert);
+            PutObjectResult putObjectResult = s3Client.putObject(bucketName, file.getName(), fileConvert);
 
-            return putObjectResult.getContentMd5();
+            return new AmazonS3File(file.getName(), HTTPS + getDomain() + bucketName + "/", file.getName());
         } catch (Exception e) {
             log.error("Error trying to saveFile", e);
         }
