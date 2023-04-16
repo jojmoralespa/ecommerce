@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @Entity
@@ -27,4 +30,8 @@ public class Product {
     @JoinColumn(name = "id_category")
     @JsonIgnoreProperties("productList")
     private Category category;
+
+    @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("productId")
+    private List<OrderProduct> orderProductInterList;
 }
