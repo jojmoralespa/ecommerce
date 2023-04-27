@@ -7,6 +7,48 @@
 	},
 	"item": [
 		{
+			"name": "S3-Service",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/Cristian/Downloads/Johan Javier Morales Parrado.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/s3/save?file",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"s3",
+								"save"
+							],
+							"query": [
+								{
+									"key": "file",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "/api/category/create",
 			"request": {
 				"method": "POST",
@@ -234,6 +276,77 @@
 						"api",
 						"category",
 						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "aoi/user/register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Carolina\",\r\n    \"lastName\": \"Gomez\",\r\n    \"email\": \"johan@gmail.com\",\r\n    \"password\": \"Hola1234\",\r\n    \"authorityPerUserList\": [\r\n        {\r\n            \"authorityId\": {\r\n                \"id\": 1\r\n            }\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/user/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/user/authenticate",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"hola@gmail.com\",\r\n    \"password\": \"Hol1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/user/authenticate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"authenticate"
 					]
 				}
 			},
