@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,12 +28,16 @@ public class CategoryController {
     private CategoryService categoryService;
 
     //allow use pageable object for pages, size and sort params
+
     @GetMapping("/category/list")
+    @PreAuthorize("hasRole('USER')")
     public Page<Category> findAll(@PageableDefault(size = 5) Pageable page) {
         return categoryService.findALl(page);
     }
 
+
     @PostMapping("/category/create")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Category> createCategory(@RequestBody Category category){
 
         if (category.getId() != null) {
@@ -42,7 +48,9 @@ public class CategoryController {
 
     }
 
+
     @GetMapping("/category/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Category> findOneById(@PathVariable Integer id) {
 
         if (!categoryService.existsById(id)) {

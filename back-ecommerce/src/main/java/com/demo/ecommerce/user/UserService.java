@@ -1,16 +1,21 @@
 package com.demo.ecommerce.user;
 
 import com.demo.ecommerce.config.JWTService;
+import com.demo.ecommerce.model.OrderProduct;
+import com.demo.ecommerce.model.Product;
 import com.demo.ecommerce.pojo.AuthenticationRequest;
 import com.demo.ecommerce.pojo.AuthenticationResponse;
 import com.demo.ecommerce.pojo.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -25,16 +30,38 @@ public class UserService {
 
     private final AuthenticationManager authenticationManager;
 
+    private final AuthorityRepository authorityRepository;
 
     public AuthenticationResponse register(RegisterRequest request) {
+
+        List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
 
         User user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
+                .authorityPerUserList(request.getAuthorityPerUserList())
                 .build();
+
+
+        List<AuthorityPerUser> authorityPerUserList = request.getAuthorityPerUserList();
+        for (AuthorityPerUser authorityPerUser : authorityPerUserList) {
+            authorityPerUser.setUserId(user);
+            Authority authority = authorityPerUser.getAuthorityId();
+            authorityPerUser.setAuthorityId(authorityRepository.findById(authority.getId()).get());
+        }
+
+
+
+//        User user = User.builder()
+//                .firstName(request.getFirstName())
+//                .lastName(request.getLastName())
+//                .email(request.getEmail())
+//                .password(passwordEncoder.encode(request.getPassword()))
+//                .authorityPerUserList(request.getAuthorityPerUserList())
+//                .role(Role.ROLE_USER)
+//                .build();
 
         //Save user into DB
         userRepository.save(user);

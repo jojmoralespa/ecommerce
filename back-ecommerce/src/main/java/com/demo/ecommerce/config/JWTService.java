@@ -1,10 +1,13 @@
 package com.demo.ecommerce.config;
 
+import com.demo.ecommerce.user.UserController;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -19,8 +22,8 @@ import java.util.function.Function;
 @Service
 public class JWTService {
 
-    @Value("${secretKeyJWT}")
-    private  String SECRET_KEY;
+    private final Logger log = LoggerFactory.getLogger(JWTService.class);
+    private final static String SECRET_KEY="4E635266556A586E5A7234753778214125442A472D4B6150645367566B597033";
 
     public String extractUserEmail(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -67,6 +70,7 @@ public class JWTService {
 
     private Claims extractAllClaims(String token) {
 
+        log.warn(token);
         return Jwts.parserBuilder()
                 .setSigningKey(getSignInKey())
                 .build()
