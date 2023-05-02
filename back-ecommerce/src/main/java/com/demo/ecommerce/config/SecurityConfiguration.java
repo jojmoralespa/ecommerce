@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -23,11 +24,12 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-
         http
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/user/**")
+                // Allow web browser H2 console, part1
+                .requestMatchers(new AntPathRequestMatcher("/h2-console/**"),
+                      new AntPathRequestMatcher("/api/user/**"))
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -36,7 +38,10 @@ public class SecurityConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                // Allow web browser H2 console, part2
+                .headers().frameOptions().disable();
+
 
         return http.build();
     }

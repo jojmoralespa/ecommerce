@@ -5,6 +5,8 @@ import com.demo.ecommerce.model.OrderProduct;
 import com.demo.ecommerce.model.Product;
 import com.demo.ecommerce.repository.OrderRepository;
 import com.demo.ecommerce.repository.ProductRepository;
+import com.demo.ecommerce.user.User;
+import com.demo.ecommerce.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +21,7 @@ import java.util.Optional;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
 
     public Order save(Order order){
         List<OrderProduct> orderProductList = order.getProductOrderInterList();
@@ -27,6 +30,9 @@ public class OrderService {
             Product productAux = orderProduct.getProductId();
             orderProduct.setProductId(productRepository.findById(productAux.getId()).get());
         }
+
+        Optional <User> usrOpt = userRepository.findById(order.getOrder_user().getId());
+        order.setOrder_user(usrOpt.get());
 
         return orderRepository.save(order);
     }

@@ -25,7 +25,7 @@ public class Authority {
     @Enumerated(EnumType.STRING)
     private  Role name;
 
-    @OneToMany(mappedBy = "authorityId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "authorityId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties("authorityId")
     private List<AuthorityPerUser> authorityPerUserList;
 

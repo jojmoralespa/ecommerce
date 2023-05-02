@@ -30,14 +30,15 @@ public class CategoryController {
     //allow use pageable object for pages, size and sort params
 
     @GetMapping("/category/list")
-    @PreAuthorize("hasRole('USER')")
+    // If "hasRole('NAME') -> Actual name = 'ROLE_USER'
+    @PreAuthorize("hasAuthority('USER')")
     public Page<Category> findAll(@PageableDefault(size = 5) Pageable page) {
         return categoryService.findALl(page);
     }
 
 
     @PostMapping("/category/create")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<Category> createCategory(@RequestBody Category category){
 
         if (category.getId() != null) {
@@ -50,7 +51,7 @@ public class CategoryController {
 
 
     @GetMapping("/category/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<Category> findOneById(@PathVariable Integer id) {
 
         if (!categoryService.existsById(id)) {

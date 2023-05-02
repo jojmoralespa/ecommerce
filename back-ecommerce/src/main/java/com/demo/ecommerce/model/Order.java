@@ -1,5 +1,6 @@
 package com.demo.ecommerce.model;
 
+import com.demo.ecommerce.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,12 +21,14 @@ public class Order {
 
     private String address;
 
-    // user is the Foreign Key to User entity
-    //private Integer user;
+    @ManyToOne
+    @JoinColumn(name = "id_user")
+    @JsonIgnoreProperties({"orderList", "authorityPerUserList"})
+    private User order_user;
 
     // product is the Foreign Key to Product entity
     // One product has several orders
-    @OneToMany(mappedBy = "orderId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "orderId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties("orderId")
     private List<OrderProduct> productOrderInterList;
 

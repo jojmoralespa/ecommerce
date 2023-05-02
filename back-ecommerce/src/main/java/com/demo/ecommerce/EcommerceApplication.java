@@ -10,6 +10,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
@@ -60,7 +63,7 @@ public class EcommerceApplication {
                 //the relation with user
                 if (authorityRepository.count() == 0) {
                     authorityRepository.saveAll(List.of(
-                            new Authority(Role.ROLE_USER),
+                            new Authority(Role.USER),
                             new Authority(Role.ADMIN)
                     ));
                 }
@@ -69,15 +72,38 @@ public class EcommerceApplication {
 
                 //Create a user in memory
                 if (userRepository.count() == 0) {
-                    userRepository.save(
-                            new User(
-                                    "superAdmin",
-                                    "ecommerce",
-                                    "superadmin@gmail.com",
-                                    passwordEncoder.encode("superAdmin")
+                    List<AuthorityPerUser> authorities = new ArrayList<>();
+                    AuthorityPerUser user = new AuthorityPerUser();
+                    AuthorityPerUser admin = new AuthorityPerUser();
+                    user.setAuthorityId(authorityRepository.findById(1).get());
+                    admin.setAuthorityId(authorityRepository.findById(2).get());
+                    authorities.add(user);
+                    authorities.add(admin);
 
-                            )
-                    );
+                    User superAdmin = User.builder()
+                            .firstName("superAdmin")
+                            .lastName("ecommerce")
+                            .email("superadmin@gmail.com")
+                            .password(passwordEncoder.encode("superAdmin"))
+                            .authorityPerUserList(authorities)
+                            .build();
+
+                    for(AuthorityPerUser authority: superAdmin.getAuthorityPerUserList()){
+                        authority.setUserId(superAdmin);
+                    }
+                    //userRepository.save(superAdmin);
+                    /*
+                    ArrayList<GrantedAuthority> authorities = new ArrayList<>();
+                    SimpleGrantedAuthority user = new SimpleGrantedAuthority(Role.USER.name());
+                    SimpleGrantedAuthority admin = new SimpleGrantedAuthority(Role.ADMIN.name());
+                    authorities.add(user);
+                    authorities.add(admin);
+
+                    User superAdmin = new User("superadming@gmail.com",
+                            passwordEncoder.encode("superAdmin"),
+                            authorities);
+                    userRepository.save(superAdmin);
+                    */
                 }
 
             }

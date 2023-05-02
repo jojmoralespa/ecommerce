@@ -2,10 +2,7 @@ package com.demo.ecommerce.user;
 
 public enum Role {
     ADMIN,
-    ROLE_USER
-
-
-
+    USER
 
     //Si vas a usar hasrole o hasauthority solo usar un tipo que es GrantedAuthorities
     // la diferencia es que  cuando guardes el valor tendras el prefijo ROLE_ y el preAuthoraize

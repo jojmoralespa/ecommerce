@@ -1,5 +1,6 @@
 package com.demo.ecommerce.user;
 
+import com.demo.ecommerce.model.Order;
 import com.demo.ecommerce.model.OrderProduct;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -21,11 +22,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User implements UserDetails {
-    public User(String firstName, String lastName, String email, String password) {
+    public User(String firstName, String lastName, String email, String password, List<AuthorityPerUser> listAuthPerUser) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.authorityPerUserList = listAuthPerUser;
     }
 
     @Id
@@ -41,6 +43,10 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private String password;
+
+    @OneToMany(mappedBy = "order_user")
+    @JsonIgnoreProperties("order_user")
+    private List<Order> orderList;
 
 //    @Enumerated(value = EnumType.STRING)
 //    private Role role;

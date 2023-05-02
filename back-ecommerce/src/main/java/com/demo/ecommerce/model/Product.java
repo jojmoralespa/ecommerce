@@ -26,12 +26,12 @@ public class Product {
     private String imageUrl;
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_category")
     @JsonIgnoreProperties("productList")
     private Category category;
 
-    @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties("productId")
     private List<OrderProduct> orderProductInterList;
 }
