@@ -1,5 +1,6 @@
 package com.demo.ecommerce.user;
 
+import com.demo.ecommerce.exceptions.AccountNotConfirmedException;
 import com.demo.ecommerce.exceptions.ErrorResponse;
 import com.demo.ecommerce.model.Category;
 import com.demo.ecommerce.pojo.AuthenticationRequest;
@@ -41,10 +42,29 @@ public class UserController {
     }
 
 
-
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(userService.register(request));
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+        try {
+            return ResponseEntity.ok(userService.register(request));
+        } catch (ErrorResponse errorResponse) {
+            log.error("email alreafy token  {}", request.getEmail(), errorResponse);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(errorResponse);
+        }
+    }
+
+
+    @GetMapping("/confirm")
+    public ResponseEntity<?> register(@RequestParam("token") String token) {
+        try {
+            return ResponseEntity.ok(userService.confirmToken(token));
+        } catch (Exception e) {
+
+            log.error("Error trying to confirm email token {} ", token, e);
+
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new ErrorResponse(e.getMessage()));
+        }
     }
 
 
@@ -56,19 +76,29 @@ public class UserController {
             return ResponseEntity.ok(userService.authenticate(request));
         } catch (BadCredentialsException badCredentialsException) {
             log.error("Bad Credentials {} and {}", request.getEmail(), request.getPassword(), badCredentialsException);
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new ErrorResponse("Bad credentials"));
-        } catch (UsernameNotFoundException usernameNotFoundException) {
-            log.error("Non existing user with email {}", request.getEmail(), usernameNotFoundException);
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new ErrorResponse("Non existing user."));
-        }catch ( DisabledException disabledException){
+            AuthenticationResponse response = AuthenticationResponse.builder()
+                    .success(Boolean.FALSE)
+                    .failureReason("Bad credentials")
+                    .build();
 
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new ErrorResponse("The account has been not confirmed yet."));
+                    .body(response);
+        } catch (AccountNotConfirmedException e) {
+            log.error("the Account has not been confirmed yet", e);
+
+            AuthenticationResponse response = AuthenticationResponse.builder()
+                    .success(Boolean.FALSE)
+                    .failureReason("The account has been not confirmed yet, ")
+                    .build();
+
+
+            if (e.getResendEmail()) {
+                response.setFailureReason(response.getFailureReason() + "and email has been re-sent for verify it.");
+            } else {
+                response.setFailureReason(response.getFailureReason() + " check your email and verify your account.");
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(response);
         }
-
     }
-
-
 }

@@ -1,13 +1,11 @@
-package com.demo.ecommerce.utils.service;
+package com.demo.ecommerce.utils.s3.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectResult;
 
-import com.demo.ecommerce.utils.aws.AmazonS3File;
-import lombok.Getter;
+import com.demo.ecommerce.utils.s3.aws.AmazonS3File;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

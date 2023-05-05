@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class Authority {
 
     @OneToMany(mappedBy = "authorityId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties("authorityId")
+    @ToString.Exclude
     private List<AuthorityPerUser> authorityPerUserList;
 
 }

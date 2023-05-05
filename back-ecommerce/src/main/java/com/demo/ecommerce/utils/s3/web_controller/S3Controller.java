@@ -1,6 +1,6 @@
-package com.demo.ecommerce.utils.web_controller;
+package com.demo.ecommerce.utils.s3.web_controller;
 
-import com.demo.ecommerce.utils.service.S3Service;
+import com.demo.ecommerce.utils.s3.service.S3Service;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,15 +1,14 @@
 package com.demo.ecommerce.user;
 
 import com.demo.ecommerce.model.Order;
-import com.demo.ecommerce.model.OrderProduct;
+import com.demo.ecommerce.user.tokenRegistration.ConfirmationToken;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,16 +18,9 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "user_table")
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class User implements UserDetails {
-    public User(String firstName, String lastName, String email, String password, List<AuthorityPerUser> listAuthPerUser) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.authorityPerUserList = listAuthPerUser;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,20 +40,28 @@ public class User implements UserDetails {
     @JsonIgnoreProperties("order_user")
     private List<Order> orderList;
 
-//    @Enumerated(value = EnumType.STRING)
-//    private Role role;
+    private Boolean enabled ;
+
+    private Boolean locked ;
 
     // Authority is the Foreign Key to Authority entity
     // One user has several Authorities
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties("userId")
-    private List<AuthorityPerUser> authorityPerUserList;
+    @ToString.Exclude
+    private List<AuthorityPerUser> userPerAuthorityList;
 
+
+    @OneToMany(mappedBy = "userid", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("userId")
+    @OrderBy("id desc")
+    @ToString.Exclude
+    private List<ConfirmationToken> confirmationTokenList = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ArrayList<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>();
-        for (AuthorityPerUser authorityPerUser : authorityPerUserList) {
+        for (AuthorityPerUser authorityPerUser : userPerAuthorityList) {
 
             SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authorityPerUser.getAuthorityId().getName().name());
             grantedAuthorities.add(simpleGrantedAuthority);
@@ -80,13 +80,10 @@ public class User implements UserDetails {
     }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
+    public boolean isAccountNonExpired() {return true;}
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !locked;
     }
 
     @Override
@@ -96,7 +93,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 
 

@@ -1,6 +1,6 @@
-package com.demo.ecommerce.utils.service;
+package com.demo.ecommerce.utils.s3.service;
 
-import com.demo.ecommerce.utils.aws.AmazonS3File;
+import com.demo.ecommerce.utils.s3.aws.AmazonS3File;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.demo.ecommerce.utils.aws;
+package com.demo.ecommerce.utils.s3.aws;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

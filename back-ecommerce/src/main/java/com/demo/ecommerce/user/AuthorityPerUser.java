@@ -3,6 +3,7 @@ package com.demo.ecommerce.user;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 @Entity
@@ -14,11 +15,13 @@ public class AuthorityPerUser {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_authority")
-    @JsonIgnoreProperties("userPerAuthorityList")
+    @JsonIgnoreProperties("authorityPerUserList")
+    @ToString.Exclude
     private Authority authorityId;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_user")
-    @JsonIgnoreProperties("authorityPerUserList")
+    @JsonIgnoreProperties("userPerAuthorityList")
+    @ToString.Exclude
     private User userId;
 }

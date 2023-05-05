@@ -59,51 +59,39 @@ public class EcommerceApplication {
                 });
 
 
-                //Create some Authorities when the application start in order to be able to perform
-                //the relation with user
-                if (authorityRepository.count() == 0) {
-                    authorityRepository.saveAll(List.of(
-                            new Authority(Role.USER),
-                            new Authority(Role.ADMIN)
-                    ));
-                }
-
-
 
                 //Create a user in memory
                 if (userRepository.count() == 0) {
-                    List<AuthorityPerUser> authorities = new ArrayList<>();
-                    AuthorityPerUser user = new AuthorityPerUser();
-                    AuthorityPerUser admin = new AuthorityPerUser();
-                    user.setAuthorityId(authorityRepository.findById(1).get());
-                    admin.setAuthorityId(authorityRepository.findById(2).get());
-                    authorities.add(user);
-                    authorities.add(admin);
 
                     User superAdmin = User.builder()
                             .firstName("superAdmin")
                             .lastName("ecommerce")
                             .email("superadmin@gmail.com")
                             .password(passwordEncoder.encode("superAdmin"))
-                            .authorityPerUserList(authorities)
+                            .userPerAuthorityList(new ArrayList<>())
+                            .enabled(true)
+                            .locked(false)
                             .build();
 
-                    for(AuthorityPerUser authority: superAdmin.getAuthorityPerUserList()){
-                        authority.setUserId(superAdmin);
-                    }
-                    //userRepository.save(superAdmin);
-                    /*
-                    ArrayList<GrantedAuthority> authorities = new ArrayList<>();
-                    SimpleGrantedAuthority user = new SimpleGrantedAuthority(Role.USER.name());
-                    SimpleGrantedAuthority admin = new SimpleGrantedAuthority(Role.ADMIN.name());
+                    userRepository.save(superAdmin);
+
+                    Authority authorityUser = new Authority(Role.USER);
+                    Authority authorityAdmin = new Authority(Role.ADMIN);
+                    authorityRepository.saveAll(List.of(authorityUser, authorityAdmin));
+
+                    List<AuthorityPerUser> authorities = new ArrayList<>();
+                    AuthorityPerUser user = new AuthorityPerUser();
+                    AuthorityPerUser admin = new AuthorityPerUser();
+                    user.setAuthorityId(authorityUser);
+                    admin.setAuthorityId(authorityAdmin);
+                    user.setUserId(superAdmin);
+                    admin.setUserId(superAdmin);
                     authorities.add(user);
                     authorities.add(admin);
 
-                    User superAdmin = new User("superadming@gmail.com",
-                            passwordEncoder.encode("superAdmin"),
-                            authorities);
+                    superAdmin.setUserPerAuthorityList(authorities);
                     userRepository.save(superAdmin);
-                    */
+
                 }
 
             }
