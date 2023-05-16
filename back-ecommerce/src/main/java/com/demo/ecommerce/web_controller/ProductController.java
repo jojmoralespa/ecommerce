@@ -1,5 +1,6 @@
 package com.demo.ecommerce.web_controller;
 
+import com.demo.ecommerce.dto.ProductDTO;
 import com.demo.ecommerce.model.Product;
 import com.demo.ecommerce.service.ProductService;
 import org.slf4j.Logger;
@@ -27,13 +28,13 @@ public class ProductController {
     }
 
     @PostMapping("/product/create")
-    public ResponseEntity<Product> createCategory(@RequestBody Product product){
+    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO){
 
-        if (product.getId() != null) {
-            log.warn("Trying to create a category with an Id");
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(productService.save(product));
+//        if (productDTO.getId() != null) {
+//            log.warn("Trying to create a category with an Id");
+//            return ResponseEntity.badRequest().build();
+//        }
+        return ResponseEntity.ok(productService.save(productDTO));
 
     }
 

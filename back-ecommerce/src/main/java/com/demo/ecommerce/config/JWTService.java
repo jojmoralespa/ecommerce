@@ -23,7 +23,9 @@ import java.util.function.Function;
 public class JWTService {
 
     private final Logger log = LoggerFactory.getLogger(JWTService.class);
-    private final static String SECRET_KEY="4E635266556A586E5A7234753778214125442A472D4B6150645367566B597033";
+
+    @Value("${secretKeyJWT}")
+    private String SECRET_KEY;
 
     public String extractUserEmail(String token) {
         return extractClaim(token, Claims::getSubject);

@@ -1,7 +1,10 @@
 package com.demo.ecommerce.model;
 
+import com.demo.ecommerce.dto.ProductDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +14,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Entity
+@Builder
+@AllArgsConstructor
 @Table(name = "product")
 public class Product {
 
@@ -26,12 +31,18 @@ public class Product {
     private String imageUrl;
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_category")
     @JsonIgnoreProperties("productList")
     private Category category;
 
     @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonIgnoreProperties("productId")
     private List<OrderProduct> orderProductInterList;
+
+    public Product(ProductDTO productDTO){
+        this.name = productDTO.getName();
+        this.price = productDTO.getPrice();
+        this.description = productDTO.getDescription();
+        this.imageUrl = productDTO.getImageUrl();
+    }
 }

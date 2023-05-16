@@ -38,25 +38,25 @@ public class EcommerceApplication {
             @Override
             public void run(String... args) throws Exception {
 
-                IntStream.rangeClosed(1, 10).forEach(i -> {
-                    Category category = new Category();
-                    category.setName("Category" + i);
-                    category.setDescription("Description" + i);
-                    category.setImageUrl("URL" + i);
-
-                    categoryRepository.save(category);
-                });
-
-                IntStream.rangeClosed(1, 10).forEach(i -> {
-                    Product product = new Product();
-                    product.setName("Product" + i);
-                    product.setDescription("Description" + i);
-                    product.setImageUrl("URL" + i);
-                    product.setPrice(1.0 * i);
-                    product.setCategory(categoryRepository.findById(1).get());
-
-                    productRepository.save(product);
-                });
+//                IntStream.rangeClosed(1, 10).forEach(i -> {
+//                    Category category = new Category();
+//                    category.setName("Category" + i);
+//                    category.setDescription("Description" + i);
+//                    category.setImageUrl("URL" + i);
+//
+//                    categoryRepository.save(category);
+//                });
+//
+//                IntStream.rangeClosed(1, 10).forEach(i -> {
+//                    Product product = new Product();
+//                    product.setName("Product" + i);
+//                    product.setDescription("Description" + i);
+//                    product.setImageUrl("URL" + i);
+//                    product.setPrice(1.0 * i);
+//                    product.setCategory(categoryRepository.findById(1).get());
+//
+//                    productRepository.save(product);
+//                });
 
 
 
