@@ -1,6 +1,5 @@
 package com.demo.ecommerce.dto;
 
-
 import com.demo.ecommerce.model.Category;
 import com.demo.ecommerce.model.Product;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -29,7 +28,8 @@ public class ProductDTO {
     private String description;
 
     @NotNull(message = "The product imageURL can't be null.")
-    @Pattern(regexp = "/\\.(jpg|jpeg|png|gif)$/i")
+//    @Pattern(regexp = "/\\.(jpg|jpeg|png|gif)$/i", message = "The image format must match " +
+//            "one of the following ones: {jpg, jpeg, png, gif}")
     private String imageUrl;
 
     @NotNull

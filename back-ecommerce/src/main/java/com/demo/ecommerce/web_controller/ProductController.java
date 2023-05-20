@@ -29,13 +29,8 @@ public class ProductController {
 
     @PostMapping("/product/create")
     public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO){
-
-//        if (productDTO.getId() != null) {
-//            log.warn("Trying to create a category with an Id");
-//            return ResponseEntity.badRequest().build();
-//        }
-        return ResponseEntity.ok(productService.save(productDTO));
-
+        return ResponseEntity
+                .ok(productService.save(productDTO));
     }
 
     @GetMapping("/product/{id}")

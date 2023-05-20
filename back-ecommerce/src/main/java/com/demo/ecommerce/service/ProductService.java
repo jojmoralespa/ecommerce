@@ -29,10 +29,8 @@ public class ProductService {
     private final Logger log = LoggerFactory.getLogger(ProductService.class);
 
     public ProductDTO save(ProductDTO productDTO) {
-        Set<String> violations = validator.validate(productDTO);
-        if(!violations.isEmpty()){
-            // TODO: Throw exception to generate BAD_REQUEST
-        }
+        // DTO validation
+        validator.validate(productDTO);
 
         Product product = new Product(productDTO);
         Optional<Category> category = categoryRepo.findById(productDTO.getCategory().getId());
@@ -43,7 +41,8 @@ public class ProductService {
         product.setCategory(category1);
         Product productComplete = productRepo.save(product);
 
-        return new ProductDTO(productComplete); }
+        return new ProductDTO(productComplete);
+    }
 
     public Product update(Product product) {
 
