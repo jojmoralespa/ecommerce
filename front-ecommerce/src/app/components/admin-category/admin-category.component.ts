@@ -15,6 +15,7 @@ export class AdminCategoryComponent implements OnInit{
   cols!: any[];
   items!: MenuItem[];
   category!: Category;
+  rowsNumber: number[] = [5,10,25,50] ;
 
   displaySaveDialog: boolean = false;
 

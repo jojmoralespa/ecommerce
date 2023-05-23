@@ -18,6 +18,8 @@ import {HomepageComponent} from './components/homepage/homepage.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { AdminCategoryComponent } from './components/admin-category/admin-category.component';
 import { AdminProductsComponent } from './components/admin-products/admin-products.component';
+import { SignInComponent } from './components/sign-in/sign-in.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { AdminProductsComponent } from './components/admin-products/admin-produc
     HomepageComponent,
     AdminComponent,
     AdminCategoryComponent,
-    AdminProductsComponent
+    AdminProductsComponent,
+    SignInComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +42,8 @@ import { AdminProductsComponent } from './components/admin-products/admin-produc
     TableModule,
     ReactiveFormsModule,
     FormsModule,
-    ToastModule
+    ToastModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

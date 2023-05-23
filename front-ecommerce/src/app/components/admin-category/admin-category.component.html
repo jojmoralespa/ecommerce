@@ -2,11 +2,11 @@
     <p-table 
     [value]="categories" 
     [paginator]="true" 
-    [rows]="5" 
+    [rows]="10" 
     [showCurrentPageReport]="true"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    currentPageReportTemplate="Showing {first} to {last}"
     [rowsPerPageOptions]="[10, 25, 50]">
-        <ng-template pTemplate="header">
+        <ng-template pTemplate="header" let-columns>
             <tr>
                 <th>
                     ID
@@ -30,13 +30,14 @@
                 </th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body">
-            <tr *ngFor="let category of categories">
+        <ng-template pTemplate="body" let-category>
+            <tr>
+            <!-- <tr *ngFor="let category of categories"> -->
                 <td>
                     {{category.id}}
                 </td>
                 <td>
-                    {{category.imageUrl}}
+                    <img [src]= "category.imageUrl">
                 </td>
                 <td>
                     {{category.name}}
