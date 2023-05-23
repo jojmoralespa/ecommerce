@@ -2,6 +2,7 @@ package com.demo.ecommerce.web_controller;
 
 import com.demo.ecommerce.dto.ProductDTO;
 import com.demo.ecommerce.model.Product;
+import com.demo.ecommerce.pojo.RequestResponse;
 import com.demo.ecommerce.service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,9 +29,10 @@ public class ProductController {
     }
 
     @PostMapping("/product/create")
-    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO){
+    public ResponseEntity<RequestResponse> createProduct(@RequestBody ProductDTO productDTO){
+        ProductDTO productComplete = productService.save(productDTO);
         return ResponseEntity
-                .ok(productService.save(productDTO));
+                .ok(new RequestResponse(productComplete));
     }
 
     @GetMapping("/product/{id}")

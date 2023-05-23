@@ -19,7 +19,7 @@ public class ProductDTO {
     private String name;
 
     @NotNull(message = "The product PRICE can't be null.")
-    @DecimalMin(value = "0.1", message = "The product PRICE must be at least 0.1.")
+    @DecimalMin(value = "0.1", inclusive = false, message = "The product PRICE must be at least 0.1.")
     private Double price;
 
     @NotNull(message = "The product description can't be null.")
